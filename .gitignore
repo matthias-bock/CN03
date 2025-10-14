@@ -1,3 +1,4 @@
 *.zip
 *.pptx
 *.pdf
+**/.DS_Store
