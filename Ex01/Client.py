@@ -37,4 +37,6 @@ print("timeDelay: "+str(timeDelay)) # display the time delay
 #### Question 4 Hints
 #The datasize can be obtained by len() function.
 #And throughput = datasize/timedelay
-
+dataSize = len(response)
+throughput = dataSize/timeDelay
+print(f"Throughput: {throughput}")
