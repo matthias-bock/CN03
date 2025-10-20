@@ -2,3 +2,7 @@
 *.pptx
 *.pdf
 **/.DS_Store
+*.log
+*.aux
+*.gz
+
