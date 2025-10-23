@@ -3,7 +3,7 @@
 
 \begin{document}
 
-\firstpage{02}{Test}{1234}
+\firstpage{02}{Matthias Bock}{1337023}
 
 \section{Lab Questions}
 
@@ -39,8 +39,12 @@
 \img{images/Ex02-3_Client3_terminal.png}
 
 \subsection{How many sockets do the clients and the server each have}
+The server and client both have one socket each.
 
 \subsection{Explain why the server can support multiple clients}
+Because the server and client use UDP to communicate.
+UDP is a connectionless protocol, which means that there no connection established between client and server.
+The server just receives packets from any client and then replies with his response.
 
 \subsection{Implement a sequence number}
 
@@ -72,17 +76,72 @@
 
 \subsection{Send 5 messages and compare the RTT values}
 
-TODO
+\subsubsection{Client terminal}
+\img[0.9]{images/Ex02-8_Client_terminal.png}
+
+\subsubsection{Comparison of RTT times}
+In this example, the client and server were running on the same PC.
+Because of this, the round trip time is overall extremely small.
+But even here it is visible that the RTT is fluctuating between requests.
+This is probably because the software still has to send the data through the network stack of the pc.
+There, it is not guaranteed that every packet is processed immediately.
+If it were sent to another PC, the overall delay would be longer.
+Furthermore, the delay variations would probably be larger because the packet has to pass through the network infrastructure to get to the other host.
+Here it experiences the 4 components of delay (propagation delay, queuing delay, processing delay, transmission delay), which all add a certain randomness.
+
 
 \section{Homework questions}
 
 \subsection{How is the source port number of the client program assigned?}
+The source port number of the client program is not explicitly assigned.
+It gets assigned automatically by the operating system.
+
 \subsection{How is the source port number of the server program assigned?}
+The source port number of the server program is assigned using the \textbf{bind} method of the socket class.
+\textit{serverSocket.bind(('', serverPort))}.
+
 \subsection{Is it possible to use clientSocket.bind() method in the client program? Please explain.}
+Yes, it is possible to use the \textit{clientSocket.bind()} int the client program.
+It could be used like this: '\textit{clientSocket.bind(('', clientPort))}'.
+This would assign a static port to the client program which will be used as the source port every time it sends data to the server.
+
 \subsection{What are multiplexing and demultiplexing?}
+Multiplexing describes enables one PC to send packets from multiple sockets by adding the transport header to the packet before passing the segments to the network layer.
+Demultiplexing enables the PC to deliver segments to the correct socket when receiving them from the network layer.
+
 \subsection{Explain the demultiplexing process of UDP (e.g. which parameters are used)}
+When a IP datagram arrives at the host, the transport-layer segment is extracted from it.
+The host then uses the destination IP address and the destination port to direct the segment to the appropriate socket.
+This process is called demultiplexing.
+
 \subsection{Describe possible techniques to provide reliable service over UDP.}
+It is possible to add reliability to UPD by building it into the application itself.
+For example by adding acknowledgement or a sequence number to the data transmitted via UDP.
+These can then be used to initiate a retransmission of lost packages.
+
 \subsection{What are the differences between IPv4 and IPv6?}
+IPv6 implements a few fields that IPv4 does not have.
+For example, the IPv6 header has a \textbf{priority} field, that allows for the identification of priority among datagrams.
+It also has a \textbf{flow label} to identify datagrams that are in the same "flow".
+Another change makes sure that the IPv6 header no longer an variable options field, but a fixed size.
+Instead, it has a field called \textbf{next header}, that identifies the upper layer protocol used for the data.
+IPv6 also does not have a checksum built into the header.
+
 \subsection{What is the relation of UDP \& RTP? Please explain the fields provided by RTP.}
+RDP runs on top of UPD and extends it.
+RDP provides the following additional fields:
+\begin{itemize}
+    \item \textbf{payload type identification:}
+	indicates the type of encoding used for the payload.
+	If the sender changes the the encoding, he informs the receiver via this field.
+    \item \textbf{packet sequence numbering:}
+	Incremented by one for each RTP packet sent.
+	This allows the receiver to detect packet loss and restore the packet sequence.
+    \item \textbf{time stamping:}
+	Contains the sampling instant of the first byte in the data packet.
+	For audio, the timestamp clock increments by one for each sampling period.
+    \item \textbf{SSRC field:}
+	Every stream in an RTP session has a distinct SSRC field.
+\end{itemize}
 
 \end{document}
