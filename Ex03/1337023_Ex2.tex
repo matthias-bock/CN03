@@ -1,0 +1,97 @@
+\documentclass[a4]{article}
+\usepackage{exercise}
+
+\begin{document}
+
+\firstpage{03}{Bock Matthias}{1337023}
+
+\section{Lab questions}
+
+\subsection{Connect Server and client}
+
+\subsubsection{Client code}
+\img{img/Ex03-1_Client_code.png}
+
+\subsubsection{Client terminal}
+\img{img/Ex03-1_Client_terminal.png}
+
+\subsubsection{Server code}
+\img{img/Ex03-1_Server_code.png}
+
+\subsubsection{Server terminal}
+\img{img/Ex03-1_Server_terminal.png}
+
+\subsection{Allow multiple clients}
+
+\subsubsection{Client 1 terminal}
+\img{img/Ex03-2_Client1_terminal.png}
+
+\subsubsection{Client 2 terminal}
+\img{img/Ex03-2_Client2_terminal.png}
+
+\subsubsection{Explanation}
+The server currently only accepts one connection from one client.
+That is why client 1 can communicate with the server without issues.
+When client 2 tried to connect, it got stuck because the server did not call the \textit{accept()} method again.
+
+\subsubsection{Server code modified}
+\img{img/Ex03-2_Server_code.png}
+
+\subsubsection{Server terminal}
+\img{img/Ex03-2_Server_terminal.png}
+The server is now able to accept connections from both clients.
+
+\subsection{Explanation of Exercise 2}
+\begin{itemize}
+    \item \textbf{How many processes and threads are created by the server program?} \newline
+        There is still only one server process, but now it creates two threads to handle both connecting clients.
+    \item \textbf{What are the IP address(es) and port number(s) of these process(es) and thread(s).} \newline
+        
+    \item \textbf{In the beginning, what is problem with client-2? After modification, why can client-2 connect to the server?}
+\end{itemize}
+
+\subsection{Extimate RTT}
+
+\subsubsection{Client code}
+\img{img/Ex03-4_Client_code.png}
+
+\subsubsection{Client terminal}
+\img{img/Ex03-4_Client_terminal.png}
+
+\subsubsection{Server code}
+\img{img/Ex03-4_Server_code.png}
+
+\subsection{Send data to two servers}
+
+\subsubsection{Client code}
+\img{img/Ex03-5_Client_code.png}
+
+\subsubsection{Server 1 terminal}
+\img{img/Ex03-5_Server1_terminal.png}
+
+\subsubsection{Server 2 terminal}
+\img{img/Ex03-5_Server2_terminal.png}
+
+\subsubsection{Client terminal}
+\img{img/Ex03-5_Client_terminal.png}
+
+\subsection{Explain question 5}
+TODO
+
+\subsection{Bonus question}
+TODO
+
+\section{Homework questions}
+
+\subsection{Suppose a server is serving ONLY five TCP clients, each has one connection. How many sockets does the server have at least? Please explain.}
+\subsection{Suppose a server is serving ONLY five UDP clients. How many sockets should the server have at least? Please explain.}
+\subsection{In TCP, what are the differences in the purposes of reliable data transfer, flow control, and congestion control?}
+\subsection{Describe the steps when a client and a server close the TCP connection between them.}
+\subsection{What are the differences between a process and a thread.}
+\subsection{What is the meaning of Seq=92 and ACK=100 in the Fig. 1a?}
+\subsection{In Fig. 1b, why does the second ACK segment have ACK=120?}
+\subsection{In Fig. 1b, why does host A resend segment with Seq=92?}
+\subsection{If a host receives three ACK segments with the same ACK values, what is its action?}
+\subsection{How can a TCP sender detect a loss?}
+
+\end{document}
