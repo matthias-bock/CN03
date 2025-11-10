@@ -44,13 +44,21 @@ The server is now able to accept connections from both clients.
 \subsection{Explanation of Exercise 2}
 \begin{itemize}
     \item \textbf{How many processes and threads are created by the server program?} \newline
-        There is still only one server process, but now it creates two threads to handle both connecting clients.
+        There is still only one server process, but now it creates two threads to handle both connecting clients. \newline
+        It will create a new thread for every client that connects to the server.
     \item \textbf{What are the IP address(es) and port number(s) of these process(es) and thread(s).} \newline
-        
+        The IP address of both the server and the client is the same because they are running on the same computer (163.143.11.43). \newline
+        The client uses a random port chosen by the operating system. \newline
+        The Server uses the welcoming port 1200 to accept connections and then opens a new port for every connection.
+        However, the welcoming port number is always used as the port number advertised to the client.
     \item \textbf{In the beginning, what is problem with client-2? After modification, why can client-2 connect to the server?}
+        At the beginning the server only accepted one connection and then enters a loop to receive data from the client. \newline
+        This prevent another client from connecting because the \textit{accept()} method is not called again. \newline
+        After the modification, the server now accepts clients an a loop, dispatching the data receiving to a new thread.
+        That way, a new client can be accepted while the old one still sends data.
 \end{itemize}
 
-\subsection{Extimate RTT}
+\subsection{Estimate RTT}
 
 \subsubsection{Client code}
 \img{img/Ex03-4_Client_code.png}
