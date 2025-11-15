@@ -84,22 +84,76 @@ The server is now able to accept connections from both clients.
 \img{img/Ex03-5_Client_terminal.png}
 
 \subsection{Explain question 5}
-TODO
+The client can connect to both servers because it opens a second port and uses it to connect to the second server.
+The client program still consists of only one process and one thread.
+This one thread sens the sentence provided by the user to both servers synchronously and waits for the response.
+The two servers are running as two different processes.
+These processes create a new thread for each client that connects to them.
+Because the client connects to both server, that means that each server stars one additional thread to handle the connected client.\newline
+So in total, there are 3 process (1 client and 2 servers) and 5 threads (1 client thread, 2 threads waiting for connections on the servers and 2 threads for handling the connected client on the servers)
 
 \subsection{Bonus question}
 TODO
 
 \section{Homework questions}
 
-\subsection{Suppose a server is serving ONLY five TCP clients, each has one connection. How many sockets does the server have at least? Please explain.}
+\subsection{Suppose a server is serving ONLY five TCP clients, each has one connection. How many sockets does the server have at least?}
+If the server is serving exactly 5 clients and does not accept any new clients, it has 5 sockets at that time, one for each connection with a client.\newline
+In case the server is currently serving 5 clients but can accept new client connections, it has 6 sockets. 5 Sockets are used for the connections with the clients, and one socket is the welcoming socket.\newline
+In general, a TCP server has at least one socket at any time, which is the welcoming socket.
+
 \subsection{Suppose a server is serving ONLY five UDP clients. How many sockets should the server have at least? Please explain.}
+A UDP server has no more than one socket at any given time. That is because UDP is a stateless protocol, and the client and server do not have a connection.
+The server uses the same port to receive and send data from and to clients.
+
 \subsection{In TCP, what are the differences in the purposes of reliable data transfer, flow control, and congestion control?}
+\begin{itemize}
+    \item \textbf{Reliable data transfer:}\newline
+    The purpose of reliable data transfer is to make sure that data is transported from the sender to the receiver is kept in order and no data is lost.
+    \item \textbf{Flow control:}\newline
+    The purpose of flow control is for the receiver to control the sender so that the sender does not overflow the receivers buffer by transmitting too much data too fast (host to host).
+    This is achieved by advertising the free buffer space of the receiver to the sender. The sender then limits the size of in flight packets to this number.
+    \item \textbf{Congestion control:}\newline
+    Congestion control tires to reduce overload in the network (host to network).
+    This is achieved by watching for lost packets or long delays. If a packet loss is detected, the sender reduces his transmission rate and slowly increases it again, until packet loss occurs again. This prevents the sender from overloading the network.
+\end{itemize}
+
 \subsection{Describe the steps when a client and a server close the TCP connection between them.}
+When one of the two sides closes the TCP connection, the send a TCP segment with the FIN bit set to 1.
+After sending the FIN flat, the connection can no longer send data, but it can still receive.
+When the other party receives the FIN message, they acknowledge it and send their own FIN message.
+Only when both client and server have sent their FIN message and received a acknowledgment for it is the connection closed.
+This is to prevent a stat where the client disconnects, but the FIN packet gets lost. This would cause the server to wait forever for a client that has already disconnected.
+
 \subsection{What are the differences between a process and a thread.}
+A process is a program running on a host. A thread can be viewed as a lightweight sub process.
+One process can have several threads running. This can be used for a web server process to start a new thread every time a client
+connects to the welcoming socket. This allows the server process to handle multiple clients simultaneously.
+
 \subsection{What is the meaning of Seq=92 and ACK=100 in the Fig. 1a?}
+SEQ=92 means that the first start byte of the message sent is the 92nd byte of the current stream.
+After the server receives the message, he sends a ACK=100 message, because the data was 8 bytes long and the server tells the client that he received all 
+bytes <= 99 and expects the 100th byte next.
+
 \subsection{In Fig. 1b, why does the second ACK segment have ACK=120?}
+Host B first received bytes 92 to 99 and told Host A that it received them and expects byte 100 next with the ACK=100 package.
+Afterwards, Host B immodestly receives bytes 100 to 119 and acknowledges them with the number 120, telling Host A that all bytes <= 119 where
+received successfully.
+
 \subsection{In Fig. 1b, why does host A resend segment with Seq=92?}
+The ACK package for the package with SEQ=92 did not arrive before the defined timeout.
+After the timeout event fired, Host A assumed that the package was lost in transmission and sent the package again.
+
 \subsection{If a host receives three ACK segments with the same ACK values, what is its action?}
+When a host receives three ACK segments with the same ACK values in a row this indicates that the the network was able to send some packets,
+while others where lost in transmission.
+This might be because the network is currently overloaded.
+The cwnd is reset to 1, and the value of ssthresh is set to half of the value cwnd had before the loss was detected.
+Transmission then gets increased exponentially, until cwnd reaches the sstrhesh value.
+From there on, cwnd gets increased linearly.
+
 \subsection{How can a TCP sender detect a loss?}
+Loss can be indicated by timeout events, meaning that a package was not acknowledged in time.\newline
+Another indicator for loss can be multiple duplicate ACKs, which indicates that the other host did not receive one package.
 
 \end{document}
