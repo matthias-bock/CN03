@@ -1,0 +1,50 @@
+from socket import * 
+import sys 
+
+serverSocket = socket(AF_INET, SOCK_STREAM)
+serverPort = 1300
+serverAddr = '163.143.11.43'
+
+# Bind the socket to server address and server port, then listen
+serverSocket.bind((serverAddr, serverPort))
+serverSocket.listen(1)
+
+
+while True:
+    print('The server is ready to receive')
+    # Set up a new connection from the client
+    connectionSocket, addr = serverSocket.accept()
+    try:
+        # Receives the request message from the client
+        message = connectionSocket.recv(99999999).decode() #should have .decode()
+        # Extract the path of the requested object from the message
+        # The path is the second part of HTTP header, identified by [1]
+        filename = message.split()[1]
+        print(filename[1:])
+        f = open(filename[1:],'rb')
+        outputdata = f.read()     # Store the file in a temporary buffer
+        # Send the HTTP response header line to the connection socket
+        connectionSocket.send("HTTP/1.1 200 OK\r\n\r\n".encode())  # should have .encode() 
+     
+        # Send the content of the requested file to the connection socket
+        connectionSocket.send(outputdata)
+
+        connectionSocket.send("\r\n".encode()) 
+        connectionSocket.close()
+    except IOError: # Using for Questions 2 and 3
+        connectionSocket.send(f"HTTP/1.1 404 Not Found\r\n\r\n \
+                              <head> \
+                                <title>404</title> \
+                              </head> \
+                              <body> \
+                                <center> \
+                                    <h1>404</h1> \
+                                    <h3>The file {filename[1:]} was not found</h1> \
+                                    <p>Client Port: {addr[1]}</p> \
+                                    <p>Did you mean <a href='image.png'>image.png</a>?</p> \
+                                </center> \
+                              </body>".encode())
+        connectionSocket.send("\r\n".encode())
+        connectionSocket.close()
+serverSocket.close()  
+sys.exit()#Terminate the program after sending the corresponding data
