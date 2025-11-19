@@ -92,9 +92,6 @@ These processes create a new thread for each client that connects to them.
 Because the client connects to both server, that means that each server stars one additional thread to handle the connected client.\newline
 So in total, there are 3 process (1 client and 2 servers) and 5 threads (1 client thread, 2 threads waiting for connections on the servers and 2 threads for handling the connected client on the servers)
 
-\subsection{Bonus question}
-TODO
-
 \section{Homework questions}
 
 \subsection{Suppose a server is serving ONLY five TCP clients, each has one connection. How many sockets does the server have at least?}
@@ -119,11 +116,11 @@ The server uses the same port to receive and send data from and to clients.
 \end{itemize}
 
 \subsection{Describe the steps when a client and a server close the TCP connection between them.}
-When one of the two sides closes the TCP connection, the send a TCP segment with the FIN bit set to 1.
-After sending the FIN flat, the connection can no longer send data, but it can still receive.
+When one of the two sides closes the TCP connection, they send a TCP segment with the FIN bit set to 1.
+After sending the FIN flag, the connection can no longer send data, but it can still receive.
 When the other party receives the FIN message, they acknowledge it and send their own FIN message.
-Only when both client and server have sent their FIN message and received a acknowledgment for it is the connection closed.
-This is to prevent a stat where the client disconnects, but the FIN packet gets lost. This would cause the server to wait forever for a client that has already disconnected.
+Only when both client and server have sent their FIN message and received an acknowledgment for it is the connection closed.
+This is to prevent a state where the client disconnects, but the FIN packet gets lost. This would cause the server to wait forever for a client that has already disconnected.
 
 \subsection{What are the differences between a process and a thread.}
 A process is a program running on a host. A thread can be viewed as a lightweight sub process.
@@ -132,7 +129,7 @@ connects to the welcoming socket. This allows the server process to handle multi
 
 \subsection{What is the meaning of Seq=92 and ACK=100 in the Fig. 1a?}
 SEQ=92 means that the first start byte of the message sent is the 92nd byte of the current stream.
-After the server receives the message, he sends a ACK=100 message, because the data was 8 bytes long and the server tells the client that he received all 
+After the server receives the message, he sends an ACK=100 message, because the data was 8 bytes long and the server tells the client that he received all 
 bytes <= 99 and expects the 100th byte next.
 
 \subsection{In Fig. 1b, why does the second ACK segment have ACK=120?}
@@ -151,6 +148,7 @@ This might be because the network is currently overloaded.
 The cwnd is reset to 1, and the value of ssthresh is set to half of the value cwnd had before the loss was detected.
 Transmission then gets increased exponentially, until cwnd reaches the sstrhesh value.
 From there on, cwnd gets increased linearly.
+It also triggers the client to resend the packages that where lost according to the repeated ACK value received.
 
 \subsection{How can a TCP sender detect a loss?}
 Loss can be indicated by timeout events, meaning that a package was not acknowledged in time.\newline
