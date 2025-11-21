@@ -1,0 +1,119 @@
+\documentclass[a4paper]{article}
+\usepackage{exercise}
+
+\begin{document}
+
+\firstpage{04}{Matthias Bock}{1337023}
+
+\section{Lab questions}
+
+\subsection{Completed server program}
+\subsubsection{Server code}
+\img{img/Ex04-1_Server_code.png}
+\subsubsection{Browser window}
+\img{img/Ex04-1_Browser.png}
+
+\subsection{Request three different images}
+\subsubsection{Browser 1}
+\img{img/Ex04-2_Browser_1.png}
+\subsubsection{Browser 2}
+\img{img/Ex04-2_Browser_2.png}
+\subsubsection{Browser 3}
+\img{img/Ex04-2_Browser_3.png}
+\subsubsection{Explanation}
+The second two requests are ok because the image files exist.
+The first image does not exist, but the server has no logic to handle this case.
+It just closes the connection, which causes the browser to display "The connection was reset".
+
+\subsection{Returning a 404 message}/
+\subsubsection{Server code}
+\img{img/Ex04-3_Server_code.png}
+\subsubsection{Browser window}
+\img{img/Ex04-3_Browser.png}
+
+\subsection{Adding details to the error message}
+\subsubsection{Server code}
+\img{img/Ex04-4_Server_code.png}
+\subsubsection{Browser window}
+\img{img/Ex04-4_Browser.png}
+
+\subsection{Adding a logging mechanism}
+\subsubsection{Server code - logging function}
+\img{img/Ex04-5_Server_logging_code.png}
+\subsubsection{Server code - logging call}
+\img{img/Ex04-5_Server_code.png}
+\subsubsection{Log sample}
+\img[0.7]{img/Ex04-5_Log.png}
+
+\subsection{Provide user id in response}
+\subsubsection{Server code}
+\img{img/Ex04-6_Server_code.png}
+\subsubsection{Browser window}
+\img{img/Ex04-6_Browser.png}
+
+\subsection{Display the use id in the browser}
+\subsubsection{Server code}
+\img{img/Ex04-7_Server_code.png}
+\subsubsection{Browser window}
+\img{img/Ex04-7_Browser.png}
+\subsubsection{Explanation}
+The \textit{img} element allows the src parameter to be a data url.
+In this case, the data format is a base64 encoded string.
+The server encodes the image data in base64 and places it as a data url in the \textit{img} element.
+That way, the data is baked into the returned html code and the image does not need to be requested again.
+
+\section{Homework questions}
+
+\subsection{What are the differences between non-persistent and persistent connections of HTTP? Which one has lower delay?}
+With non persistent HTTP connections the browser opens a new TCP connection for each object encountered on a webpage (like images etc.).
+The connection is closed after one object is sent.\newline
+Persistent HTTP connections allow the browser to load these object over the same connection.\newline
+Persistent HTTP connections have a lower delay because the client can send a request as soon as it encounters a referenced object.
+This means that all objects can be transmitted in as little as one RTT.
+With non persistent HTTP connections the browser opens a new connection for each object, which causes delay because of the connection overhead.
+
+\subsection{What are the roles of cookies?}
+HTTP is a stateless protocol, but cookies introduce a possibility to track the state of the user.
+They are sent with every HTTP request and are used for tasks like authorization, shopping carts or to preserve the user session state.
+
+\subsection{What are the advantages of using proxies?}
+They reduce the response time for client requests.\newline
+They reduce the traffic on an institutions access link.\newline
+They enable "poor" content providers to effectively deliver content.
+
+\subsection{In the caching example (slides 46~49, Lecs 9-10), what are benefits of using a local Web cache?}
+If many clients request the same large file over the access link, this can overwhelm the link capacity.
+This increases the delay for all users.
+The stress on the access link can be reduced by introducing a local cache.
+Now the large file is only requested once over the access link, and all other users can read it from the cache.
+Another advantage of this is that large LAN bandwidth is cheaper than large access link bandwidth.
+So the cache enables faster download speeds for all subsequent requests without a more expensive, larger access link.
+
+\subsection{In that caching example, suppose the cache hit rate is 0.6, please compute the total (average) delay. Please explain why the delay becomes better than when the cache hit rate is 0.4?}
+
+
+\subsection{Please describe the steps when a user (e.g. Bob) requests and receives a video over a Content delivery network (CDN).}
+\begin{enumerate}
+    \item Bob gets the video URL from the webpage.
+    \item The URL is resolved using Bob's local differences
+    \item The video platform's DNS server returns the URL of a CDN server
+    \item The URL returned is resolved via the CNS's DNS server
+    \item The IP address of the CDN server is returned to Bob
+    \item Bob requests the video from the CDN server and streams it over HTTP
+\end{enumerate}
+
+\subsection{Please list typical services that are based on (i) client-server architecture and (ii) peerto-peer architecture.}
+\textbf{(i): } Webpages, Data server or data centers. \newline
+\textbf{(ii): } File distribution (BitTorrent), Streaming (Sopcast) and VoIP (Skype).
+
+\subsection{Please describe the advantages of SDN.}
+
+
+\subsection{What are the differences between application-layer protocols and transport-layer protocols?}
+\subsection{What are the differences between Client-server architecture and Peer-to-peer architecture?}
+In client server architecture all clients communicate with a central server. If this server goes down, no client can access the service.\newline
+In a P2P architecture, all clients ("peers") communicate with each other to provide the service.
+If one client goes down, another client can replace it. Managing this service is more complex, because peers can join and leave the network at any time.
+
+
+\end{document}

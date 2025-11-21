@@ -32,7 +32,12 @@ while True:
         connectionSocket.send(f'HTTP/1.1 200 OK\r\n\
 Content-type: text/html\r\n\
 My-Custom-ID: {userID}\r\n\r\n \
-    <center><h1>User ID: {userID}</h1></center><img src="data:image/png;base64,{outputdata.decode()}">'.encode())  # should have .encode() 
+    <html><body>\
+        <center>\
+            <h1>User ID: {userID}</h1>\
+            <img src="data:image/png;base64,{outputdata.decode()}">\
+        </center>\
+    </body></html>'.encode())  # should have .encode() 
 
         connectionSocket.send("\r\n".encode()) 
         connectionSocket.close()
